@@ -114,81 +114,89 @@ Lalu buat untuk setiap request yang mengandung ``/its`` akan di proxy passing me
 
 
 
-## Soal 5
-Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
-## Penyelesaian Soal 5
+## Soal 12
+Selanjutnya LB ini hanya boleh diakses oleh client dengan IP ``192.210.3.69``, ``192.210.3.70``, ``192.210.4.167``, dan ``192.210.4.168``. hint: (fixed in dulu clinetnya)
+## Penyelesaian Soal 12
 ```R
     code.....
 ```
 
 
 
-## Soal 5
-Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
-## Penyelesaian Soal 5
+## Soal 13
+Semua data yang diperlukan, diatur pada Denken dan harus dapat diakses oleh ``Frieren``, ``Flamme``, dan ``Fern``.
+## Penyelesaian Soal 13
 ```R
     code.....
 ```
 
 
 
-## Soal 5
-Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
-## Penyelesaian Soal 5
+## Soal 14
+``Frieren``, ``Flamme``, dan ``Fern`` memiliki Riegel Channel sesuai dengan [`quest guide`](https://github.com/martuafernando/laravel-praktikum-jarkom) berikut. Jangan lupa melakukan instalasi PHP8.0 dan Composer.
+## Penyelesaian Soal 14
 ```R
     code.....
 ```
 
 
 
-## Soal 5
-Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
-## Penyelesaian Soal 5
+## Soal 15
+Riegel Channel memiliki beberapa endpoint yang harus ditesting sebanyak 100 request dengan 10 request/second. Tambahkan response dan hasil testing pada grimoire.
+a. POST /auth/register 
+## Penyelesaian Soal 15
 ```R
     code.....
 ```
 
 
 
-## Soal 5
-Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
-## Penyelesaian Soal 5
+## Soal 16
+Riegel Channel memiliki beberapa endpoint yang harus ditesting sebanyak 100 request dengan 10 request/second. Tambahkan response dan hasil testing pada grimoire.
+b. POST /auth/login (Lanjutan soal 15)
+## Penyelesaian Soal 16
 ```R
     code.....
 ```
 
 
 
-## Soal 5
-Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
-## Penyelesaian Soal 5
+## Soal 17
+Riegel Channel memiliki beberapa endpoint yang harus ditesting sebanyak 100 request dengan 10 request/second. Tambahkan response dan hasil testing pada grimoire.
+c. GET /me (Lanjutan soal 15)
+## Penyelesaian Soal 17
 ```R
     code.....
 ```
 
 
 
-## Soal 5
-Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
-## Penyelesaian Soal 5
+## Soal 18
+Untuk memastikan ketiganya bekerja sama secara adil untuk mengatur Riegel Channel maka implementasikan Proxy Bind pada Eisen untuk mengaitkan IP dari ``Frieren``, ``Flamme``, dan ``Fern``.
+## Penyelesaian Soal 18
 ```R
     code.....
 ```
 
 
 
-## Soal 5
-Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
-## Penyelesaian Soal 5
+## Soal 19
+Untuk meningkatkan performa dari Worker, coba implementasikan PHP-FPM pada Frieren, Flamme, dan Fern. Untuk testing kinerja naikkan 
+- pm.max_children
+- pm.start_servers
+- pm.min_spare_servers
+- pm.max_spare_servers
+sebanyak tiga percobaan dan lakukan testing sebanyak 100 request dengan 10 request/second kemudian berikan hasil analisisnya pada Grimoire.
+## Penyelesaian Soal 19
 ```R
     code.....
 ```
 
 
 
-## Soal 5
-Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
-## Penyelesaian Soal 5
+## Soal 20
+Nampaknya hanya menggunakan PHP-FPM tidak cukup untuk meningkatkan performa dari worker maka implementasikan Least-Conn pada Eisen. Untuk testing kinerja dari worker tersebut dilakukan sebanyak 100 request dengan 10 request/second
+## Penyelesaian Soal 20
 ```R
     code.....
 ```
