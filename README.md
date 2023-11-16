@@ -1,5 +1,5 @@
 # Jarkom-Modul-3-E08-2023
-Laporan Resmi Praktimum 2 JARKOM
+Laporan Resmi Praktimum 3 JARKOM
 
 **Anggota Kelompok ``E08``** 
 | No | Nama | NRP |
