@@ -50,7 +50,7 @@ Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 
 
 
 ## Soal 6
-Pada masing-masing worker PHP, lakukan konfigurasi virtual host untuk website <a href="https://drive.google.com/file/d/1ViSkRq7SmwZgdK64eRbr5Fm1EGCTPrU1/view" style="text-decoration: none;">berikut</a> dengan menggunakan php 7.3.
+Pada masing-masing worker PHP, lakukan konfigurasi virtual host untuk website [`berikut`](https://drive.google.com/file/d/1ViSkRq7SmwZgdK64eRbr5Fm1EGCTPrU1/view) dengan menggunakan php 7.3.
 ## Penyelesaian Soal 6
 ```R
     code.....
