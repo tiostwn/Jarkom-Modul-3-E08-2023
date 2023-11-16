@@ -55,3 +55,141 @@ Pada masing-masing worker PHP, lakukan konfigurasi virtual host untuk website [`
 ```R
     code.....
 ```
+
+
+
+## Soal 7
+Kepala suku dari Bredt Region memberikan resource server sebagai berikut:
+a. Lawine, 4GB, 2vCPU, dan 80 GB SSD.
+b. Linie, 2GB, 2vCPU, dan 50 GB SSD.
+c. Lugner 1GB, 1vCPU, dan 25 GB SSD.
+aturlah agar Eisen dapat bekerja dengan maksimal, lalu lakukan testing dengan 1000 request dan 100 request/second.
+
+## Penyelesaian Soal 7
+```R
+    code.....
+```
+
+
+
+## Soal 8
+Karena diminta untuk menuliskan grimoire, buatlah analisis hasil testing dengan 200 request dan 10 request/second masing-masing algoritma Load Balancer dengan ketentuan sebagai berikut:
+a. Nama Algoritma Load Balancer.
+b. Report hasil testing pada Apache Benchmark.
+c. Grafik request per second untuk masing masing algoritma. 
+d. Analisis. 
+
+## Penyelesaian Soal 8
+```R
+    code.....
+```
+
+
+
+## Soal 9
+Dengan menggunakan algoritma Round Robin, lakukan testing dengan menggunakan 3 worker, 2 worker, dan 1 worker sebanyak 100 request dengan 10 request/second, kemudian tambahkan grafiknya pada grimoire. 
+## Penyelesaian Soal 9
+```R
+    code.....
+```
+
+
+## Soal 10
+Selanjutnya coba tambahkan konfigurasi autentikasi di LB dengan dengan kombinasi ``username: “netics”`` dan ``password: “ajkyyy”``, dengan ``yyy`` merupakan kode kelompok. Terakhir simpan file ``“htpasswd”`` nya di ``/etc/nginx/rahasisakita/`` 
+## Penyelesaian Soal 10
+```R
+    code.....
+```
+
+
+
+## Soal 11
+Lalu buat untuk setiap request yang mengandung ``/its`` akan di proxy passing menuju halaman [`https://www.its.ac.id.`](https://www.its.ac.id/) hint: (proxy_pass)
+
+## Penyelesaian Soal 11
+```R
+    code.....
+```
+
+
+
+
+## Soal 5
+Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
+## Penyelesaian Soal 5
+```R
+    code.....
+```
+
+
+
+## Soal 5
+Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
+## Penyelesaian Soal 5
+```R
+    code.....
+```
+
+
+
+## Soal 5
+Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
+## Penyelesaian Soal 5
+```R
+    code.....
+```
+
+
+
+## Soal 5
+Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
+## Penyelesaian Soal 5
+```R
+    code.....
+```
+
+
+
+## Soal 5
+Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
+## Penyelesaian Soal 5
+```R
+    code.....
+```
+
+
+
+## Soal 5
+Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
+## Penyelesaian Soal 5
+```R
+    code.....
+```
+
+
+
+## Soal 5
+Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
+## Penyelesaian Soal 5
+```R
+    code.....
+```
+
+
+
+## Soal 5
+Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
+## Penyelesaian Soal 5
+```R
+    code.....
+```
+
+
+
+## Soal 5
+Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch3 selama 3 menit sedangkan pada client yang melalui Switch4 selama 12 menit. Dengan waktu maksimal dialokasikan untuk peminjaman alamat IP selama 96 menit.
+## Penyelesaian Soal 5
+```R
+    code.....
+```
+
