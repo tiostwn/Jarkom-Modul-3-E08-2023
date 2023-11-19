@@ -386,6 +386,8 @@ service php7.3-fpm restart
 service nginx restart
 nginx -t
 ```
+
+Hasil `lynx granz.channel.e08.com` dari client
 ![no6 - Lawine](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/40db429a-da37-4337-9157-ecc14ff5361b)
 ![no6 - Linie](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/e4ce1e08-5255-46ee-8b0c-bf4a0c6272c5)
 ![no6 - Lugner](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/878dcfd8-9890-4d4a-8d19-e5c1e6eb2630)
@@ -401,9 +403,14 @@ aturlah agar Eisen dapat bekerja dengan maksimal, lalu lakukan testing dengan 10
 
 ## Penyelesaian Soal 7
 ```R
-    code.....
+ab -n 1000 -c 100 http://www.granz.channel.e08.com/ 
 ```
 
+![no7 - AB](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/215a8c4a-173c-425e-9822-1351b733143b)
+
+Hasil `htop` pada setiap worker
+![no7](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/be8b525a-91ff-4f13-bfe2-19d2ec265442)
+![no7 - req](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/54149225-e429-4eb4-9db3-8a59c654c665)
 
 <a id="soal8"></a>
 ## Soal 8
@@ -414,45 +421,346 @@ c. Grafik request per second untuk masing masing algoritma.
 d. Analisis. 
 
 ## Penyelesaian Soal 8
+Link Griomire -> https://docs.google.com/document/d/1ycT2eMasmnmWuV7xShepgMv7LoVVgGvD3gX82sGTbYQ/edit?usp=sharing
+
+Jalankan script ini untuk menjalankan Apache Benchmark
 ```R
-    code.....
+ab -n 200 -c 10 http://www.granz.channel.e08.com/ 
 ```
 
+### Round Robin
+```R
+apt-get update
+apt-get install bind9 nginx
+
+echo '
+ upstream myweb  {
+        server 192.210.3.1; #IP Lawine
+        server 192.210.3.2; #IP Linie
+        server 192.210.3.3; #IP Lugner
+ }
+
+ server {
+        listen 80;
+        server_name granz.channel.e08.com;
+
+        location / {
+        proxy_pass http://myweb;
+        }
+ }' > /etc/nginx/sites-available/lb-jarkom
+
+ln -s /etc/nginx/sites-available/lb-jarkom /etc/nginx/sites-enabled
+rm -rf /etc/nginx/sites-enabled/default
+
+service nginx restart
+nginx -t
+```
+
+#### Hasil `Apache Benchmark` dan `htop` Round Robin 
+![no8 - 1 RR AB](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/3f64f5aa-09c6-40cb-8b68-b0eaab2c9756)
+![no8 - 1 RR htop](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/28c05a3a-97e5-4a27-81ae-6736cffaefe5)
+![no8 - 1 RR req](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/3441da8c-53f3-4617-8c99-0b95cfa1ee09)
+
+
+### Weighted Round Robin
+```R
+echo '
+ upstream myweb  {
+        server 192.210.3.1 weight=4; #IP Lawine
+        server 192.210.3.2 weight=2; #IP Linie
+        server 192.210.3.3 weight=1; #IP Lugner
+ }
+
+ server {
+        listen 80;
+        server_name granz.channel.e08.com;
+
+        location / {
+              proxy_pass http://myweb;
+              proxy_set_header    X-Real-IP $remote_addr;
+              proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header    Host $http_host;
+        }
+ }' > /etc/nginx/sites-available/lb-jarkom
+
+unlink /etc/nginx/sites-enabled/lb-jarkom
+ln -s /etc/nginx/sites-available/lb-jarkom /etc/nginx/sites-enabled
+rm -rf /etc/nginx/sites-enabled/default
+
+service nginx restart
+nginx -t
+```
+
+#### Hasil `Apache Benchmark` dan `htop` Weighted Round Robin 
+![no8 - 2 WRR AB](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/2c0601ba-b0d4-483f-a2c8-ec124de67f61)
+![no8 - 2 WRR htop](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/3f45d18f-0cd1-48ff-83fd-c67e47a0cdef)
+![no8 - 2 WRR req](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/39c45516-9250-4fe3-8b81-f1653f9105b1)
+
+### Least Connection
+```R
+echo '
+ upstream myweb  {
+        least_conn;
+        server 192.210.3.1; #IP Lawine
+        server 192.210.3.2; #IP Linie
+        server 192.210.3.3; #IP Lugner
+ }
+
+ server {
+        listen 80;
+        server_name granz.channel.e08.com;
+
+        location / {
+              proxy_pass http://myweb;
+              proxy_set_header    X-Real-IP $remote_addr;
+              proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header    Host $http_host;
+        }
+ }' > /etc/nginx/sites-available/lb-jarkom
+
+unlink /etc/nginx/sites-enabled/lb-jarkom
+ln -s /etc/nginx/sites-available/lb-jarkom /etc/nginx/sites-enabled
+rm -rf /etc/nginx/sites-enabled/default
+
+service nginx restart
+nginx -t
+```
+
+#### Hasil `Apache Benchmark` dan `htop` Least Connection
+![no8 - 3 leastCon AB](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/a5734256-a2ea-4615-a6f9-5ff3da4735b8)
+![no8 - 3 leastCon req](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/a7263322-1311-49ce-9e17-247ab004e621)
+![no8 - 3 leastCon htop](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/f1668557-896e-43d1-a3f6-81ecd3481a2d)
+
+
+### Ip Hash
+```R
+echo '
+ upstream myweb  {
+        ip_hash;
+        server 192.210.3.1; #IP Lawine
+        server 192.210.3.2; #IP Linie
+        server 192.210.3.3; #IP Lugner
+ }
+
+ server {
+        listen 80;
+        server_name granz.channel.e08.com;
+
+        location / {
+              proxy_pass http://myweb;
+              proxy_set_header    X-Real-IP $remote_addr;
+              proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header    Host $http_host;
+        }
+ }' > /etc/nginx/sites-available/lb-jarkom
+
+unlink /etc/nginx/sites-enabled/lb-jarkom
+ln -s /etc/nginx/sites-available/lb-jarkom /etc/nginx/sites-enabled
+rm -rf /etc/nginx/sites-enabled/default
+
+service nginx restart
+nginx -t
+```
+
+#### Hasil `Apache Benchmark` dan `htop` IP Hash
+![no8 - 4 ipHash AB](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/49647c7a-77cb-45af-b9b2-8675be5737ac)
+![no8 - 4 ipHash htop](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/2376f06f-6263-4879-ac15-20214d492d54)
+![no8 - 4 ipHash req](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/e3123aaf-5f4e-4fd2-a87f-37aced388d54)
+
+### Generic Hash
+```R
+echo '
+ upstream myweb  {
+        hash $request_uri consistent;
+        server 192.210.3.1; #IP Lawine
+        server 192.210.3.2; #IP Linie
+        server 192.210.3.3; #IP Lugner
+ }
+
+ server {
+        listen 80;
+        server_name granz.channel.e08.com;
+
+        location / {
+              proxy_pass http://myweb;
+              proxy_set_header    X-Real-IP $remote_addr;
+              proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header    Host $http_host;
+        }
+ }' > /etc/nginx/sites-available/lb-jarkom
+
+unlink /etc/nginx/sites-enabled/lb-jarkom
+ln -s /etc/nginx/sites-available/lb-jarkom /etc/nginx/sites-enabled
+rm -rf /etc/nginx/sites-enabled/default
+
+service nginx restart
+nginx -t
+```
+
+#### Hasil `Apache Benchmark` dan `htop` Generic Hash
+![no8 - 5 genericHash AB](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/7126d00b-bbbd-4521-beb9-94864a57c487)
+![no8 - 5 genericHash htop](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/ca49b4bf-8645-4ad5-aea0-7e831012317b)
+![no8 - 5 genericHash req](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/ed66291f-2883-44a1-9ebf-456f53f47d77)
+
+
+<img width="654" alt="image" src="https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/02ee4c0f-9d70-43db-92e4-ee7f8a3c1d3c">
 
 <a id="soal9"></a>
 ## Soal 9
-Dengan menggunakan algoritma Round Robin, lakukan testing dengan menggunakan 3 worker, 2 worker, dan 1 worker sebanyak 100 request dengan 10 request/second, kemudian tambahkan grafiknya pada grimoire. 
+Dengan menggunakan algoritma Round Robin, lakukan testing dengan menggunakan 3 worker, 2 worker, dan 1 worker sebanyak 100 request dengan 10 request/second, kemudian tambahkan grafiknya pada grimoire.
+
+
 ## Penyelesaian Soal 9
 ```R
-    code.....
+ab -n 100 -c 10 http://www.granz.channel.e08.com/ 
 ```
+
+matikan nginx pada worker dengan cara `service nginx stop`
+
+### 3 Worker
+![no9 - 3 worker AB](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/9b14a8ed-69de-46e2-9cec-7132d36d8eef)
+![no9 - 3 worker htop](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/6a368703-b7b1-4f8f-96f4-77b351740297)
+![no9 - 3 worker req](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/a6583baa-097c-4a91-b293-32fb535d14f9)
+
+### 2 Worker
+![no9 - 2 worker AB](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/201532fd-d5cb-42d3-b44b-cf85183f46a3)
+![no9 - 2 worker htop](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/d8e41d5a-cd20-4c91-8196-9a791f582a26)
+![no9 - 2 worker req](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/4f8fa68b-c714-4da2-bbf2-8a62ca935aa6)
+
+### 1 Worker
+![no9 - 1 worker AB](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/e245e1a6-3429-4aae-ae13-7efebe2a34d0)
+![no9 - 1 worker htop](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/7f9be9ad-d4a9-4ba6-95ab-4ed6201d7aff)
+![no9 - 1 worker req](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/8f258516-0b35-4f95-931e-23d1ba852592)
+
 
 <a id="soal10"></a>
 ## Soal 10
 Selanjutnya coba tambahkan konfigurasi autentikasi di LB dengan dengan kombinasi ``username: “netics”`` dan ``password: “ajkyyy”``, dengan ``yyy`` merupakan kode kelompok. Terakhir simpan file ``“htpasswd”`` nya di ``/etc/nginx/rahasisakita/`` 
+
 ## Penyelesaian Soal 10
+Jalankan script ini pada Eisen (Load Balancer)
 ```R
-    code.....
+echo '
+ upstream myweb  {
+        server 192.210.3.1; #IP Lawine
+        server 192.210.3.2; #IP Linie
+        server 192.210.3.3; #IP Lugner
+ }
+
+ server {
+        listen 80;
+        server_name granz.channel.e08.com;
+
+        location / {
+        proxy_pass http://myweb;
+        auth_basic "Restricted Access";
+        auth_basic_user_file /etc/nginx/rahasisakita/.htpasswd;
+        }
+ }' > /etc/nginx/sites-available/lb-jarkom
+
+unlink /etc/nginx/sites-enabled/lb-jarkom
+ln -s /etc/nginx/sites-available/lb-jarkom /etc/nginx/sites-enabled
+rm -rf /etc/nginx/sites-enabled/default
+
+mkdir /etc/nginx/rahasisakita/
+htpasswd -c -b /etc/nginx/rahasisakita/.htpasswd netics ajke08
+
+service nginx restart
+nginx -t
 ```
 
+Jalankan `lynx granz.channel.e08.com` pada client
+![no10](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/665b4a98-9fdc-4b40-a7c2-c824be010cdb)
+![no10 - a](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/790582dc-6630-465a-8aaf-0f8707ced270)
+![no10 - b](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/22081c06-745d-4e41-be5e-dc160c77085d)
 
 <a id="soal11"></a>
 ## Soal 11
 Lalu buat untuk setiap request yang mengandung ``/its`` akan di proxy passing menuju halaman [`https://www.its.ac.id.`](https://www.its.ac.id/) hint: (proxy_pass)
 
 ## Penyelesaian Soal 11
+Jalankan script ini pada Eisen (Load Balancer)
 ```R
-    code.....
+echo '
+ upstream myweb  {
+        server 192.210.3.1; #IP Lawine
+        server 192.210.3.2; #IP Linie
+        server 192.210.3.3; #IP Lugner
+ }
+
+ server {
+        listen 80;
+        server_name granz.channel.e08.com;
+
+        location / {
+                proxy_pass http://myweb;
+                auth_basic "Restricted Access";
+                auth_basic_user_file /etc/nginx/rahasisakita/.htpasswd;
+        }
+
+        location ~* /its {
+                proxy_pass https://www.its.ac.id;
+        }
+
+ }' > /etc/nginx/sites-available/lb-jarkom
+
+unlink /etc/nginx/sites-enabled/lb-jarkom
+ln -s /etc/nginx/sites-available/lb-jarkom /etc/nginx/sites-enabled
+rm -rf /etc/nginx/sites-enabled/default
+
+mkdir -p /etc/nginx/rahasisakita/
+htpasswd -c -b /etc/nginx/rahasisakita/.htpasswd netics ajke08
+
+service nginx restart
+nginx -t
 ```
 
-
+Jalankan `lynx granz.channel.e08.com` pada client
+![no11](https://github.com/tiostwn/Jarkom-Modul-3-E08-2023/assets/53292102/b28e9d36-6215-425f-ab57-92948bd399ff)
 
 <a id="soal12"></a>
 ## Soal 12
 Selanjutnya LB ini hanya boleh diakses oleh client dengan IP ``192.210.3.69``, ``192.210.3.70``, ``192.210.4.167``, dan ``192.210.4.168``. hint: (fixed in dulu clinetnya)
 ## Penyelesaian Soal 12
 ```R
-    code.....
+echo '
+ upstream myweb  {
+        server 192.210.3.1; #IP Lawine
+        server 192.210.3.2; #IP Linie
+        server 192.210.3.3; #IP Lugner
+ }
+
+ server {
+        listen 80;
+        server_name granz.channel.e08.com;
+
+        location / {
+                proxy_pass http://myweb;
+                auth_basic "Restricted Access";
+                auth_basic_user_file /etc/nginx/rahasisakita/.htpasswd;
+
+                allow 192.210.3.69;
+                allow 192.210.3.70;
+                allow 192.210.4.167;
+                allow 192.210.4.168;
+                deny all;
+        }
+
+        location ~* /its {
+                proxy_pass https://www.its.ac.id;
+        }
+
+ }' > /etc/nginx/sites-available/lb-jarkom
+
+unlink /etc/nginx/sites-enabled/lb-jarkom
+ln -s /etc/nginx/sites-available/lb-jarkom /etc/nginx/sites-enabled
+rm -rf /etc/nginx/sites-enabled/default
+
+mkdir -p /etc/nginx/rahasisakita/
+htpasswd -c -b /etc/nginx/rahasisakita/.htpasswd netics ajke08
+
+service nginx restart
+nginx -t
 ```
 
 
